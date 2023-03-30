@@ -1,0 +1,44 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"name": "root"
+		},
+		{
+			"path": "server",
+			"name": "server"
+		},
+		{
+			"path": "web",
+			"name": "web"
+		}
+	],
+	"settings": {},
+	"launch": {
+		"configurations": [
+			{
+				"name": "LaunchServer",
+				"type": "go",
+				"request": "launch",
+				"mode": "auto",
+				"program": "${workspaceFolder:server}"
+			},
+			{
+				"name": "LaunchWeb",
+				"request": "launch",
+				"type": "chrome",
+				"url": "http://localhost:5173",
+				"webRoot": "${workspaceFolder:web}"
+			}
+		],
+		"compounds": [
+			{
+				"name": "server and web",
+				"configurations": [
+					"LaunchWeb",
+					"LaunchServer"
+				]
+			}
+		]
+	},
+}

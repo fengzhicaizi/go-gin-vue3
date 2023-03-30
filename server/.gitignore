@@ -1,0 +1,9 @@
+runtime
+vendor
+.DS_Store
+**/.DS_Store
+__debug_bin
+go.sum
+__debug_bin.exe
+.idea
+

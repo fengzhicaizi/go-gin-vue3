@@ -1,0 +1,142 @@
+definitions:
+  app.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: An example of gin
+  title: go-blog api
+  version: "1.0"
+paths:
+  /api/back/GetTags:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: ping example
+      tags:
+      - 标签模块
+  /api/back/tag:
+    post:
+      responses: {}
+      tags:
+      - 标签模块
+  /api/back/tag/:id:
+    delete:
+      responses: {}
+      tags:
+      - 标签模块
+    put:
+      responses: {}
+      tags:
+      - 标签模块
+  /api/back/user/{id}:
+    delete:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 删除用户
+      tags:
+      - 用户模块
+    put:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: userName
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 用户信息修改
+      tags:
+      - 用户模块
+  /api/back/users:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取所有用户
+      tags:
+      - 用户模块
+  /login:
+    post:
+      parameters:
+      - description: username
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 管理系统登录
+      tags:
+      - 通用模块
+  /register:
+    post:
+      parameters:
+      - description: userName
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 管理系统注册
+      tags:
+      - 通用模块
+swagger: "2.0"
