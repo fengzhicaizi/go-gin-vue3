@@ -133,10 +133,10 @@ onMounted(() => {
 			<template #bodyCell="{ record, column }">
 				<template v-if="column.key === 'operation'">
 					<div style="width: 100%; display: flex; flex-direction: row; justify-content: space-around">
-						<Button :disabled="record.username === 'admin'" size="small" @click="assgin(record)">配置</Button>
-						<Button :disabled="record.username === 'admin'" size="small" @click="edit(record)">编辑</Button>
+						<Button size="small" @click="assgin(record)" :disabled="record.isAllMenus">配置</Button>
+						<Button size="small" @click="edit(record)" :disabled="record.isAllMenus">编辑</Button>
 						<Popconfirm title="确定删除此行数据，删除后无法恢复?" @confirm="deleteMenu(record.id)">
-							<Button size="small" type="ghost" danger>删除</Button>
+							<Button size="small" type="ghost" danger :disabled="record.isAllMenus">删除</Button>
 						</Popconfirm>
 					</div>
 				</template>
