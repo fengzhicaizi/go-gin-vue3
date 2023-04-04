@@ -1,10 +1,14 @@
 <script lang="ts" setup>
-import { Modal, Form, FormItem, Input, message, Select, SelectOption } from 'ant-design-vue';
+import { Modal, Form, FormItem, Input, message, Select, SelectOption, Upload } from 'ant-design-vue';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue';
+import {} from 'ant-design-vue';
 import { ref, reactive, nextTick } from 'vue';
 import { createAuthApi, updateAuthApi } from '@/apis/system/auth';
 import type { UpdateRoleBodyType } from '@/apis/system/role.d';
 import type { AuthBodyType, UpdateAuthBodyType } from '@/apis/system/auth.d';
+import { uploadApi } from '@/apis/common/upload';
 import type { Rule } from 'ant-design-vue/lib/form/index';
+import type { UploadRequestOption } from 'ant-design-vue/lib/vc-upload/interface.d';
 
 export type openFnArgsType = {
 	type?: 'edit' | 'add';
@@ -27,6 +31,7 @@ const visible = ref<boolean>(false);
 const confirmLoading = ref<boolean>(false);
 const title = ref<string>('新增');
 const modalProps: openFnArgsType = {};
+const uploading = ref<boolean>(false);
 const formRef = ref();
 const col = {
 	wrapperCol: { span: 15 },
@@ -100,13 +105,33 @@ const open = (props: openFnArgsType) => {
 	});
 };
 
+function onbeforeunload() {
+	return true;
+	//
+}
+
+// 自定义上传行为
+async function upload(options: UploadRequestOption<any>) {
+	const file = options.file;
+	try {
+		uploading.value = true;
+		const formData = new FormData();
+		formData.append('files[]', file);
+		uploadApi('/upload', formData);
+	} catch (err: any) {
+		message.error(err);
+	} finally {
+		uploading.value = false;
+	}
+}
+
 defineExpose({
 	open,
 });
 </script>
 
 <template>
-	<Modal :visible="visible" :title="title" :confirm-loading="confirmLoading" @cancel="cancel" @ok="ok">
+	<Modal class="model" :visible="visible" :title="title" :confirm-loading="confirmLoading" @cancel="cancel" @ok="ok">
 		<Form ref="formRef" v-bind="col" :model="form" :rules="rules" autocomplete="off">
 			<FormItem label="账号" name="username">
 				<Input v-model:value="form.username" />
@@ -122,8 +147,26 @@ defineExpose({
 			<FormItem label="电话号码" name="phone">
 				<Input v-model:value="form.phone" />
 			</FormItem>
+			<FormItem label="头像" name="image">
+				<Upload class="upload" name="avatar" list-type="picture-card" :show-upload-list="false" :before-upload="onbeforeunload" :custom-request="upload">
+					<div class="upload-button">
+						<LoadingOutlined v-if="uploading"></LoadingOutlined>
+						<PlusOutlined v-else></PlusOutlined>
+						<div style="margin-top: 12px">上传</div>
+					</div>
+				</Upload>
+			</FormItem>
 		</Form>
 	</Modal>
 </template>
 
-<style lang="less"></style>
+<style lang="less" scoped>
+.model {
+	.upload {
+		.upload-button {
+			display: flex;
+			flex-direction: column;
+		}
+	}
+}
+</style>

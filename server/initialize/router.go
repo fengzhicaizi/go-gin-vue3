@@ -1,7 +1,10 @@
 package initialize
 
 import (
+	"net/http"
+
 	"github.com/fengzhicaizi/gin-vue3/app/router"
+	"github.com/fengzhicaizi/gin-vue3/app/router/common"
 	"github.com/fengzhicaizi/gin-vue3/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -18,8 +21,7 @@ func Router() *gin.Engine {
 
 	r.Use(middleware.Cros()).Use(gin.Logger()).Use(gin.Recovery())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	// r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
-	// r.POST("/upload/images", common.UploadImages)
+	r.StaticFS("/upload/images", http.Dir("./"))
 
 	PrivateGroup := r.Group("/v1/")
 
@@ -28,6 +30,12 @@ func Router() *gin.Engine {
 		systemRouter.InitDictRouter(PrivateGroup)
 		systemRouter.InitRoleRouter(PrivateGroup)
 		systemRouter.InitMenuRouter(PrivateGroup)
+	}
+
+	CommonGroup := r.Group("/common/")
+
+	{
+		common.InitUploadRouter(CommonGroup)
 	}
 
 	return r

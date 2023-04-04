@@ -1,59 +1,43 @@
 package common
 
-// import (
-// 	"mime/multipart"
-// 	"net/http"
-// 	"github.com/fengzhicaizi/gin-vue3/pkg/file"
-// 	"github.com/fengzhicaizi/gin-vue3/pkg/upload"
+import (
+	"fmt"
+	"mime/multipart"
+	"net/http"
 
-// 	"github.com/gin-gonic/gin"
-// 	"github.com/google/uuid"
-// )
+	"github.com/fengzhicaizi/gin-vue3/app/model/common/response"
+	"github.com/gin-gonic/gin"
+)
 
-// // Login @tags 通用模块
-// // @Summary 上传图片
-// // @Produce  json
-// // @Param username formData string true "username"
-// // @Param password formData string true "password"
-// // @Success 200 {object} app.Response
-// // @Router /upload/images [post]
-// func UploadImages(c *gin.Context) {
-// 	type File struct {
-// 		Filename string `json:"filename"` // 文件名
-// 		Size     int    `json:"size"`     // 文件大小
-// 		Path     string `json:"path"`     //文件路径
-// 		Type     string `json:"type"`     //文件类型
-// 	}
-// 	var p struct {
-// 		Files []*multipart.FileHeader `form:"files" binding:"required"`
-// 	}
-// 	var res []*File
+// @Summary   单文件上传
+// @Tags      upload
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysAuthority                                                true  "权限id, 权限名, 父角色id"
+// @Success   200   {object}  response.Response{data=systemRes.SysAuthorityResponse,msg=string}  "创建角色,返回包括系统角色详情"
+func Upload(c *gin.Context) {
+	var (
+		files struct {
+			Files []*multipart.FileHeader `form:"files" binding:"required"`
+		}
+		Data struct {
+			Urls []string `json:"urls"`
+		}
+	)
 
-// 	if err := c.ShouldBind(&p); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"detail": err.Error(),
-// 		})
-// 		return
-// 	}
+	if err := c.ShouldBind(&files); err != nil {
+		response.Response(&response.ResponseStruct{Code: http.StatusBadRequest, Msg: err.Error()}, c)
+		return
+	}
 
-// 	for _, v := range p.Files {
-// 		filename := uuid.New().String() + file.GetExt(v.Filename)
-// 		err := c.SaveUploadedFile(v, upload.GetImageFullPath()+filename)
-// 		if err != nil {
-// 			c.JSON(http.StatusBadRequest, gin.H{
-// 				"detail": err.Error(),
-// 			})
-// 			return
-// 		}
-// 		res = append(res, &File{
-// 			Filename: filename,
-// 			Size:     int(v.Size),
-// 			Path:     upload.GetImageFullUrl(filename),
-// 			Type:     v.Header["Content-Type"][0],
-// 		})
-// 	}
+	for _, fh := range files.Files {
+		if err := c.SaveUploadedFile(fh, fmt.Sprintf("./runtime/upload/images/%v", fh.Filename)); err != nil {
+			response.Response(&response.ResponseStruct{Code: http.StatusBadRequest, Msg: err.Error()}, c)
+			return
+		}
+		Data.Urls = append(Data.Urls, fmt.Sprintf("./runtime/upload/images/%v", fh.Filename))
+	}
 
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"detail": res,
-// 	})
-// }
+	response.Response(&response.ResponseStruct{Code: http.StatusOK, Msg: "上传成功", Data: Data}, c)
+}
