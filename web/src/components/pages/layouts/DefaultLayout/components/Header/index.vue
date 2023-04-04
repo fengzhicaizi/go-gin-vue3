@@ -45,7 +45,7 @@ const openUserInfoModal = () => {
 };
 
 // 全屏幕
-const changeFullScreen = () => {
+function changeFullScreen() {
 	const id = config.fullScreenId;
 	const dom = document.getElementById(id);
 
@@ -54,7 +54,11 @@ const changeFullScreen = () => {
 	} else {
 		message.error('没有需要全屏的内容');
 	}
-};
+}
+// 刷新
+function refresh() {
+	location.reload();
+}
 </script>
 
 <template>
@@ -65,7 +69,8 @@ const changeFullScreen = () => {
 			</template>
 		</Breadcrumb>
 		<div class="ability">
-			<Icon title="全屏" type="icon-quanping" @click="changeFullScreen" class="icon"></Icon>
+			<Icon title="刷新" type="icon-shuaxin" @click="refresh" class="icon-style"></Icon>
+			<Icon title="全屏" type="icon-quanping" @click="changeFullScreen" class="icon-style"></Icon>
 		</div>
 		<div class="account">
 			<Dropdown trigger="click">
@@ -78,8 +83,8 @@ const changeFullScreen = () => {
 
 				<template #overlay>
 					<Menu class="menu">
-						<MenuItem style="text-align: center" @click="openUserInfoModal"><Icon type="icon-user" class="icon"></Icon>个人设置</MenuItem>
-						<MenuItem style="text-align: center" @click="loginOut"><Icon type="icon-tuichu" class="icon"></Icon>退出登录</MenuItem>
+						<MenuItem style="text-align: center" @click="openUserInfoModal"> <Icon type="icon-user" class="icon"></Icon>个人设置</MenuItem>
+						<MenuItem style="text-align: center" @click="loginOut"> <Icon type="icon-tuichu" class="icon"></Icon>退出登录</MenuItem>
 					</Menu>
 				</template>
 			</Dropdown>
@@ -96,23 +101,28 @@ const changeFullScreen = () => {
 	justify-content: space-between;
 	align-items: center;
 	margin-left: 24px;
+
 	.crumb {
 		flex: 1;
 	}
+
 	.ability {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		.icon {
-			font-size: 20px;
+
+		.icon-style {
+			font-size: 14px;
 			margin-right: 24px;
 			transition: all 0.2s;
+
 			&:hover {
 				color: #000;
 				cursor: pointer;
 			}
 		}
 	}
+
 	.account {
 		display: flex;
 		flex-direction: row;
@@ -120,10 +130,12 @@ const changeFullScreen = () => {
 		cursor: pointer;
 	}
 }
+
 .dropdown {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+
 	.portrait {
 		height: 30px;
 		width: 30px;
@@ -138,9 +150,11 @@ const changeFullScreen = () => {
 		background-color: #f1d5d6;
 	}
 }
+
 .menu {
 	width: 120px;
 	padding: 12px 0;
+
 	.icon {
 		font-size: 14px;
 		margin-right: 12px;

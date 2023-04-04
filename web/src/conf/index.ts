@@ -7,7 +7,7 @@ type ConfType = {
 
 const conf: ConfType = {
 	baseUrl: 'http://localhost:9001',
-	iconUrl: '//at.alicdn.com/t/c/font_3617313_l8x6wg0frts.js',
+	iconUrl: '//at.alicdn.com/t/c/font_3617313_xgbydvonz2d.js',
 	fullScreenId: 'full-screen',
 	cesiumIon: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlN2M2MGJjNS0wMzZlLTQ1NjYtODQ0Mi1kZjQ2NGIwZDMwMmYiLCJpZCI6MTI0MDE3LCJpYXQiOjE2NzU5MzA3MTR9.lwJu5x5VjD2SX50Tlasg-w4qbhF000GdG06XD8fl5Tk`,
 };
