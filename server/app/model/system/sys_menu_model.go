@@ -10,6 +10,7 @@ type SysMenu struct {
 	Path      string    `json:"path"`
 	Sort      int       `json:"sort"`
 	Mark      string    `json:"mark"`
+	Stuatus   bool      `json:"stuatus"`
 	Icon      string    `json:"icon"`
 	CreatedAt time.Time `json:"createdAt"` // 创建时间
 	UpdatedAt time.Time `json:"updatedAt"` // 更新时间

@@ -40,6 +40,15 @@ const columns: ColumnsType = [
 		width: 100,
 	},
 	{
+		title: '状态',
+		dataIndex: 'status',
+		align: 'center',
+		width: 100,
+		customRender: ({ record }) => {
+			return record.status ? '显示' : '隐藏';
+		},
+	},
+	{
 		title: '排序',
 		dataIndex: 'sort',
 		align: 'center',

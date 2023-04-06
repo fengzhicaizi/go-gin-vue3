@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Modal, Form, FormItem, Input, message, Row, Col, Textarea } from 'ant-design-vue';
+import { Modal, Form, FormItem, Input, message, Row, Col, Textarea, Switch } from 'ant-design-vue';
 import { ref, reactive, nextTick } from 'vue';
 import { createMenuApi, updateMenuApi } from '@/apis/system/menu';
 import type { AddMenuBodyType, UpdateMenuBodyType } from '@/apis/system/menu.d';
@@ -22,6 +22,7 @@ type FormState = {
 	path: string;
 	sort: number;
 	icon: string;
+	status: boolean;
 	mark: string;
 };
 
@@ -42,6 +43,7 @@ const form = reactive<FormState>({
 	path: '',
 	sort: 1,
 	icon: '',
+	status: true,
 	mark: '',
 });
 const rules: Record<string, Rule[]> = {
@@ -68,6 +70,7 @@ const ok = async () => {
 				code: value.code || '',
 				path: value.path || '',
 				sort: Math.floor(value.sort) || 1,
+				status: value.status || true,
 				icon: value.icon || '',
 				mark: value.mark || '',
 			};
@@ -107,6 +110,7 @@ const open = (props: openFnArgsType) => {
 			form.code = props.data?.code || '';
 			form.sort = props.data?.sort || 1;
 			form.icon = props.data?.icon || '';
+			form.status = props.data?.status || true;
 			form.mark = props.data?.mark || '';
 			title.value = '编辑';
 		}
@@ -120,7 +124,7 @@ defineExpose({
 
 <template>
 	<Modal width="800px" :visible="visible" :title="title" :confirm-loading="confirmLoading" @cancel="cancel" @ok="ok">
-		<Form ref="formRef" v-bind="col" :model="form" :rules="rules" autocomplete="off">
+		<Form ref="formRef" v-bind="col" :label-col="{ style: { width: '94px' } }" :model="form" :rules="rules" autocomplete="off">
 			<Row>
 				<Col span="12">
 					<FormItem label="菜单名" name="name">
@@ -147,8 +151,13 @@ defineExpose({
 						<Input v-model:value="form.icon" placeholder="icon-font图标,例如：icon-menu" />
 					</FormItem>
 				</Col>
+				<Col span="12">
+					<FormItem label="是否显示" name="status">
+						<Switch v-model:checked="form.status" checked-children="显示" un-checked-children="隐藏"></Switch>
+					</FormItem>
+				</Col>
 				<Col span="24">
-					<FormItem :label-col="{ span: 2 }" :wrapper-col="{ span: 22 }" label="备注" name="mark">
+					<FormItem :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" label="备注" name="mark">
 						<Textarea v-model:value="form.mark" />
 					</FormItem>
 				</Col>

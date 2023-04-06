@@ -9,6 +9,7 @@ export type AddMenuBodyType = {
 	path: string;
 	sort: number;
 	mark: string;
+	status: boolean;
 	icon: string;
 };
 
